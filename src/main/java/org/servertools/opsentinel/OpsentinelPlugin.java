@@ -1,3 +1,4 @@
+
 package org.servertools.opsentinel;
 
 import org.bukkit.Bukkit;
@@ -6,6 +7,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.servertools.opsentinel.modules.FlyByManager;
+import org.servertools.opsentinel.modules.LagAnalyzer;
+import org.servertools.opsentinel.modules.PlayerStats;
 
 import java.io.*;
 import java.util.*;
@@ -15,9 +19,16 @@ public class OpsentinelPlugin extends JavaPlugin {
     private File configFile;
     private final Map<String, String> config = new HashMap<>();
 
+    private FlyByManager flyByManager;
+    private LagAnalyzer lagAnalyzer;
+    private PlayerStats playerStats;
+
     @Override
     public void onEnable() {
         loadConfigFile();
+        flyByManager = new FlyByManager();
+        lagAnalyzer = new LagAnalyzer(this);
+        playerStats = new PlayerStats();
         getLogger().info("Opsentinel geladen.");
     }
 
@@ -45,10 +56,10 @@ public class OpsentinelPlugin extends JavaPlugin {
     private void saveDefaultConfigFile() {
         getDataFolder().mkdirs();
         try (FileWriter writer = new FileWriter(configFile)) {
-            writer.write("# Opsentinel Konfigurationsdatei");
-            writer.write("ping_warn_ms=500");
-            writer.write("drop_warn_amount=100");
-            writer.write("afk_timeout_minutes=10");
+            writer.write("# Opsentinel Konfigurationsdatei\n");
+            writer.write("ping_warn_ms=500\n");
+            writer.write("drop_warn_amount=100\n");
+            writer.write("afk_timeout_minutes=10\n");
         } catch (IOException e) {
             getLogger().warning("Fehler beim Schreiben der Standardkonfiguration: " + e.getMessage());
         }
@@ -65,23 +76,64 @@ public class OpsentinelPlugin extends JavaPlugin {
             return true;
         }
 
+        String cmd = label.toLowerCase();
+        if (cmd.equals("whylag")) {
+            lagAnalyzer.runAnalysis();
+            return true;
+        }
+
+        if (!cmd.equals("ops")) {
+            return false;
+        }
+
         if (args.length == 0) {
             sender.sendMessage(ChatColor.YELLOW + "/ops pingstats - Zeigt aktuelle Spielerpings");
+            sender.sendMessage(ChatColor.YELLOW + "/ops flyby [Spieler]");
+            sender.sendMessage(ChatColor.YELLOW + "/ops playerstats <Spieler>");
+            sender.sendMessage(ChatColor.YELLOW + "/ops whylag");
             return true;
         }
 
-        if (args[0].equalsIgnoreCase("pingstats")) {
-            int warnThreshold = getConfigInt("ping_warn_ms", 500);
-            sender.sendMessage(ChatColor.GOLD + "Aktuelle Spieler-Pings:");
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                int ping = player.getPing();
-                String color = ping > warnThreshold ? "§c" : "§a";
-                sender.sendMessage(color + "- " + player.getName() + ": " + ping + " ms");
+        switch (args[0].toLowerCase()) {
+            case "pingstats" -> {
+                int warnThreshold = getConfigInt("ping_warn_ms", 500);
+                sender.sendMessage(ChatColor.GOLD + "Aktuelle Spieler-Pings:");
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    int ping = player.getPing();
+                    String color = ping > warnThreshold ? "§c" : "§a";
+                    sender.sendMessage(color + "- " + player.getName() + ": " + ping + " ms");
+                }
+                return true;
             }
-            return true;
+            case "flyby" -> {
+                if (args.length < 2) {
+                    sender.sendMessage(ChatColor.RED + "Verwendung: /ops flyby <Spieler>");
+                    return true;
+                }
+                Player target = Bukkit.getPlayerExact(args[1]);
+                if (target == null) {
+                    sender.sendMessage(ChatColor.RED + "Spieler nicht gefunden.");
+                    return true;
+                }
+                flyByManager.toggleFly(target, sender instanceof Player ? (Player) sender : target);
+                return true;
+            }
+            case "playerstats" -> {
+                if (args.length < 2) {
+                    sender.sendMessage(ChatColor.RED + "Verwendung: /ops playerstats <Spieler>");
+                    return true;
+                }
+                playerStats.showStats(sender, args[1]);
+                return true;
+            }
+            case "whylag" -> {
+                lagAnalyzer.runAnalysis();
+                return true;
+            }
+            default -> {
+                sender.sendMessage(ChatColor.RED + "Unbekannter Subbefehl. Nutze /ops für Hilfe.");
+                return true;
+            }
         }
-
-        sender.sendMessage(ChatColor.RED + "Unbekannter Subbefehl. Nutze /ops für Hilfe.");
-        return true;
     }
 }
