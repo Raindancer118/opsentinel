@@ -1,0 +1,7 @@
+# Opsentinel Konfigurationsdatei
+# Bei Erststart automatisch erzeugt
+# Änderungen an dieser Datei werden beim nächsten Zugriff übernommen
+
+ping_warn_ms=500
+drop_warn_amount=100
+afk_timeout_minutes=10

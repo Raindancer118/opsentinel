@@ -1,0 +1,13 @@
+name: Opsentinel
+version: 1.0
+main: org.servertools.opsentinel.OpsentinelPlugin
+api-version: 1.21
+commands:
+  ops:
+    description: Hauptbefehl für Adminfunktionen
+    usage: /ops <subcommand>
+    aliases: [opsentinel]
+
+  whylag:
+    description: Analysiert Lag-Ursachen
+    usage: /whylag

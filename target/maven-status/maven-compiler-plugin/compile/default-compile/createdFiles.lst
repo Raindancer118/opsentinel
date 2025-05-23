@@ -1,0 +1,7 @@
+org/servertools/opsentinel/modules/FlyByManager.class
+org/servertools/opsentinel/modules/PlayerStats.class
+org/servertools/opsentinel/modules/WhoDidThis.class
+org/servertools/opsentinel/modules/FlyByManager$1.class
+org/servertools/opsentinel/modules/WhyLag.class
+org/servertools/opsentinel/modules/LagAnalyzer.class
+org/servertools/opsentinel/OpsentinelPlugin.class
