@@ -10,6 +10,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.servertools.opsentinel.modules.FlyByManager;
 import org.servertools.opsentinel.modules.LagAnalyzer;
 import org.servertools.opsentinel.modules.PlayerStats;
+import org.servertools.opsentinel.modules.Leaderboard;
+import org.servertools.opsentinel.modules.WhoDidThis;
 
 import java.io.*;
 import java.util.*;
