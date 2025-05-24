@@ -22,6 +22,7 @@ public class OpsentinelPlugin extends JavaPlugin {
     private FlyByManager flyByManager;
     private LagAnalyzer lagAnalyzer;
     private PlayerStats playerStats;
+    private Leaderboard leaderboard;
 
     @Override
     public void onEnable() {
@@ -29,6 +30,7 @@ public class OpsentinelPlugin extends JavaPlugin {
         flyByManager = new FlyByManager();
         lagAnalyzer = new LagAnalyzer(this);
         playerStats = new PlayerStats();
+        leaderboard = new Leaderboard();
         getLogger().info("Opsentinel geladen.");
     }
 
@@ -124,6 +126,10 @@ public class OpsentinelPlugin extends JavaPlugin {
                     return true;
                 }
                 playerStats.showStats(sender, args[1]);
+                return true;
+            }
+            case "leaderboard" -> {
+                leaderboard.showLeaderboard();
                 return true;
             }
             case "whylag" -> {

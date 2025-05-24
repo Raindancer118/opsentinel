@@ -32,10 +32,10 @@ public class PlayerStats {
         sender.sendMessage(ChatColor.YELLOW + "• Letzte Aktivität: " + ChatColor.WHITE + formatAgo(lastPlayed));
         sender.sendMessage(ChatColor.YELLOW + "• Onlinezeit: " + ChatColor.WHITE + formatPlaytime(playtimeMin));
 
-        sender.sendMessage(ChatColor.YELLOW + "• Blöcke abgebaut: " + ChatColor.WHITE + target.getStatistic(Statistic.MINE_BLOCK));
         sender.sendMessage(ChatColor.YELLOW + "• Tode: " + ChatColor.WHITE + target.getStatistic(Statistic.DEATHS));
         sender.sendMessage(ChatColor.YELLOW + "• Mobs getötet: " + ChatColor.WHITE + target.getStatistic(Statistic.MOB_KILLS));
         sender.sendMessage(ChatColor.YELLOW + "• Spieler getötet: " + ChatColor.WHITE + target.getStatistic(Statistic.PLAYER_KILLS));
+        sender.sendMessage(ChatColor.YELLOW + "• Sprünge: " + ChatColor.WHITE + target.getStatistic(Statistic.JUMP));
 
         int cmWalked = target.getStatistic(Statistic.WALK_ONE_CM);
         sender.sendMessage(ChatColor.YELLOW + "• Strecke gelaufen: " + ChatColor.WHITE + String.format("%.2f km", cmWalked / 100000.0));
