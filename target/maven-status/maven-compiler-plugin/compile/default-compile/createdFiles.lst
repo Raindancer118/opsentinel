@@ -1,5 +1,6 @@
 org/servertools/opsentinel/modules/FlyByManager.class
 org/servertools/opsentinel/modules/PlayerStats.class
+org/servertools/opsentinel/modules/Updater.class
 org/servertools/opsentinel/modules/WhoDidThis.class
 org/servertools/opsentinel/modules/Leaderboard.class
 org/servertools/opsentinel/modules/FlyByManager$1.class
