@@ -20,6 +20,7 @@ public class Updater {
     }
 
     public void checkForUpdates() {
+        plugin.getLogger().info("[Updater] Prüfe auf Updates...");
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 URL url = new URL("https://raw.githubusercontent.com/Raindancer118/opsentinel/main/src/main/java/org/servertools/opsentinel/version.txt");
@@ -47,7 +48,7 @@ public class Updater {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             updateAvailable = false;
             plugin.getLogger().info("[Opsentinel] Update-Zeitfenster abgelaufen.");
-        }, 20L * 10); // 10 Sekunden
+        }, 20L * 30); // 10 Sekunden
     }
 
     public boolean isUpdateAvailable() {
