@@ -7,10 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.servertools.opsentinel.modules.FlyByManager;
-import org.servertools.opsentinel.modules.LagAnalyzer;
-import org.servertools.opsentinel.modules.Leaderboard;
-import org.servertools.opsentinel.modules.PlayerStats;
+import org.servertools.opsentinel.modules.*;
 
 import java.io.*;
 import java.util.*;
@@ -23,6 +20,7 @@ public class OpsentinelPlugin extends JavaPlugin {
     private FlyByManager flyByManager;
     private LagAnalyzer lagAnalyzer;
     private PlayerStats playerStats;
+    private Updater updater;
     private Leaderboard leaderboard;
 
     @Override
@@ -31,6 +29,8 @@ public class OpsentinelPlugin extends JavaPlugin {
         flyByManager = new FlyByManager();
         lagAnalyzer = new LagAnalyzer(this);
         playerStats = new PlayerStats();
+        updater = new Updater(this);
+        updater.checkForUpdates();
         leaderboard = new Leaderboard();
         getLogger().info("Opsentinel geladen.");
     }
@@ -127,6 +127,14 @@ public class OpsentinelPlugin extends JavaPlugin {
                     return true;
                 }
                 playerStats.showStats(sender, args[1]);
+                return true;
+            }
+            case "confirm" -> {
+                if (updater != null && updater.isUpdateAvailable()) {
+                    updater.performUpdate();
+                } else {
+                    sender.sendMessage(ChatColor.GRAY + "Kein Update verfügbar.");
+                }
                 return true;
             }
             case "leaderboard" -> {
